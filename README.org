@@ -1,10 +1,10 @@
 * Fall 2022 - Lab 10
 
-* Last name:
+* Last name: Deng
 
-* First name:
+* First name: JianHua
 
-* GitHub username:
+* GitHub username:JianHua-Deng
 
 * Notes:
 
