@@ -25,7 +25,7 @@ Time addMinutes(Time time0, int min){
 }//end addMinuites function
 
 //Task C
-void printMovie(Movie mv){
+std::string getMovie(Movie mv){
     std::string g;
     switch (mv.genre) {
         case ACTION   : g = "ACTION"; break;
@@ -34,14 +34,15 @@ void printMovie(Movie mv){
         case ROMANCE  : g = "ROMANCE"; break;
         case THRILLER : g = "THRILLER"; break;
     }
-    std::cout << mv.title << " " << g << " (" << mv.duration << " min)";
+    return mv.title + " " + g + " (" + std::to_string(mv.duration) + " min)";
 }//end printMovie function
 
-void printTimeSlot(TimeSlot ts){
+std::string getTimeSlot(TimeSlot ts){
     Time endtime = addMinutes(ts.startTime, ts.movie.duration);
 
-    printMovie(ts.movie);
-    std::cout << " [starts at " << ts.startTime.h << ":" << ts.startTime.m << ", ends by " << endtime.h << ":" << endtime.m <<"] "; 
+    std::string newstring = getMovie(ts.movie);
+    newstring += " [starts at " + std::to_string(ts.startTime.h) + ":" + std::to_string(ts.startTime.m) + ", ends by " + std::to_string(endtime.h) + ":" + std::to_string(endtime.m) + "] "; 
+    return newstring;
 }//en printTimeSlot function
 
 
@@ -50,3 +51,24 @@ TimeSlot scheduleAfter(TimeSlot ts, Movie nextMovie){
     return {nextMovie, endtime};
 }//end scheduleAfter function
 
+bool timeOverlap(TimeSlot ts1, TimeSlot ts2){
+    //Checks which timeslot is earlier
+    if(minutesSinceMidnight(ts1.startTime) < minutesSinceMidnight(ts2.startTime)){
+        //Checks if the gaps between timeslot1's start time and timeslot2's start time are greater or equal to movie's duration
+        //If yes, then they don't overlap
+        //Debugging: std::cout << "Ran default condition, minutesUntil(ts1.startTime, ts2.startTime): " << minutesUntil(ts1.startTime, ts2.startTime) << ", ts1.movie.duration: " << ts1.movie.duration << "\n";
+        if(minutesUntil(ts1.startTime, ts2.startTime) > ts1.movie.duration){
+            return false;
+        }else{
+            return true;
+        }//end else condition
+    }else{
+        //Debugging: std::cout << "Ran else condition, minutesUntil(ts2.startTime, ts1.startTime): " << minutesUntil(ts2.startTime, ts1.startTime) << ", ts2.movie.duration: " << ts2.movie.duration << "\n";
+        if(minutesUntil(ts2.startTime, ts1.startTime) > ts2.movie.duration){
+            return false;
+        }else{
+            return true;
+        }//end else condition
+    }//end else condition
+
+}//end timeoverlap function
